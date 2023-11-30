@@ -2,7 +2,7 @@ const controllers = require('./controllers');
 const mid = require('./middleware');
 
 const router = (app) => {
-  app.get('/getDomos', mid.requiresLogin, controllers.Domo.getDomos);
+  //app.get('/getDomos', mid.requiresLogin, controllers.Domo.getDomos);
 
   app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
@@ -14,10 +14,14 @@ const router = (app) => {
 
   app.get('/logout', mid.requiresLogin, controllers.Account.logout);
 
-  app.get('/maker', mid.requiresLogin, controllers.Domo.makerPage);
-  app.post('/maker', mid.requiresLogin, controllers.Domo.makeDomo);
+  app.get('/homePage', controllers.CatGram.homePage);
+  app.post('/postGram', mid.requiresLogin, controllers.CatGram.postCatGram);
 
-  app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
+  app.get('/retrieveGram',controllers.CatGram.retrieveGram);
+  app.get('/getGrams', controllers.CatGram.getGrams);
+  app.post('/updateLikes', mid.requiresLogin, controllers.CatGram.updateLikes);
+
+  app.get('/', mid.requiresSecure, controllers.CatGram.homePage);
 };
 
 module.exports = router;

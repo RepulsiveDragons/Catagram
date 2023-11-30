@@ -25,8 +25,7 @@ const login = (req, res) => {
     }
 
     req.session.account = Account.toAPI(account);
-
-    return res.json({ redirect: '/maker' });
+    return res.json({ redirect: '/homePage' });
   });
 };
 
@@ -48,7 +47,7 @@ const signup = async (req, res) => {
     const newAccount = new Account({ username, password: hash });
     await newAccount.save();
     req.session.account = Account.toAPI(newAccount);
-    return res.json({ redirect: '/maker' });
+    return res.json({ redirect: '/homePage' });
   } catch (err) {
     console.log(err);
     if (err.code === 11000) {
@@ -99,29 +98,6 @@ const changePassword = (req, res) => {
       return res.status(500).json({ error: 'Error updating password!' });
     }
   });
-  // if (err || !account) {
-  //   return res.status(401).json({ error: 'This is not your current password!' });
-  // }
-
-  // try {
-  //   doc = await Account.findOne({ username }).exec();
-  //   if (!doc) {
-  //     return res.status(500).json({ error: 'User was not found!' });
-  //   }
-  // } catch (error) {
-  //   return res.status(500).json({ error: 'An error occured!' });
-  // }
-
-  // try {
-  //   const hash = await Account.generateHash(newPass);
-  //   doc.password = hash;
-  //   await doc.save();
-
-  //   req.session.destroy();
-  //   return res.json({ redirect: '/' });
-  // } catch (error) {
-  //   return res.status(500).json({ error: 'Error updating password!' });
-  // }
 };
 
 module.exports = {

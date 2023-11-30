@@ -7,12 +7,12 @@ const handleError = (message) => {
    entries in the response JSON object, and will handle them appropriately.
 */
 const sendPost = async (url, data, handler) => {
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
+  const response = await fetch(url,{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
   });
 
   const result = await response.json();
@@ -31,6 +31,16 @@ const sendPost = async (url, data, handler) => {
   }
 };
 
+const sendGram = async(e) => {
+  const response = await fetch('/postGram',{
+    method: 'POST',
+    body: new FormData(),
+  });
+
+  const text = await response.text();
+  console.log(text);
+};
+
 const hideError = () => {
   document.getElementById('domoMessage').classList.add('hidden');
 }
@@ -38,5 +48,6 @@ const hideError = () => {
 module.exports = {
   handleError,
   sendPost,
+  sendGram,
   hideError,
 }

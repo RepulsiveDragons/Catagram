@@ -10,12 +10,13 @@ const helmet = require('helmet');
 const session = require('express-session');
 const RedisStore = require('connect-redis').default;
 const redis = require('redis');
+const fileUpload = require('express-fileupload');
 
 const router = require('./router.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
-const dbURI = process.env.MONGODB_URI || 'mongodb://127.0.0.1/DomoMaker';
+const dbURI = process.env.MONGODB_URI || 'mongodb://127.0.0.1/Catagram';
 mongoose.connect(dbURI).catch((err) => {
   if (err) {
     console.log('Could not connect to database');
@@ -36,6 +37,7 @@ redisClient.connect().then(() => {
   app.use('/assets', express.static(path.resolve(`${__dirname}/../hosted`)));
   app.use(favicon(`${__dirname}/../hosted/img/favicon.png`));
   app.use(compression());
+  app.use(fileUpload());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
   app.use(session({
