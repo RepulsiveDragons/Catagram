@@ -10,6 +10,7 @@ const postCatGram = async (req, res) => {
   }
 
   const { mediaFile } = req.files;
+  console.log(mediaFile);
 
   const catPost = {
     text: req.body.textInput,
@@ -17,8 +18,8 @@ const postCatGram = async (req, res) => {
     data: req.files.mediaFile.data,
     size: req.files.mediaFile.size,
     mimetype: req.files.mediaFile.mimetype,
-    likes : 0,
-  }
+    likes: 0,
+  };
 
   try {
     const newCatGram = new CatGram(catPost);
@@ -72,10 +73,12 @@ const getGrams = async (req, res) => {
 };
 
 const updateLikes = async (req, res) => {
-
   let doc;
   try {
-    doc = await CatGram.findOneAndUpdate({ _id: req.body._id },{$inc: {likes: req.body.signedNum}}).exec();
+    doc = await CatGram.findOneAndUpdate(
+      { _id: req.body._id },
+      { $inc: { likes: req.body.signedNum } },
+    ).exec();
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: 'Something went wrong' });
@@ -88,7 +91,7 @@ const updateLikes = async (req, res) => {
   return res.status(201).json({
     message: 'Likes updated on the server',
   });
-}
+};
 
 module.exports = {
   homePage,

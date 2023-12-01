@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-const _ = require('underscore');
-
 
 const CatGramSchema = new mongoose.Schema({
   text: {

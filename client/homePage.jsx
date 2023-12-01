@@ -2,14 +2,6 @@ const helper = require('./helper.js');
 const React = require('react');
 const ReactDOM = require('react-dom');
 
-// const handleGram = (e) => {
-//   e.preventDefault();
-//   helper.hideError();
-
-//   helper.sendGram(e.target.action);
-
-//   return false;
-// }
 
 const sendGram = async(e) => {
   e.preventDefault();
@@ -25,6 +17,29 @@ const sendGram = async(e) => {
 
   return false;
 };
+
+const isLoggedIn = async() => {
+  const response = await fetch('/checkLoggedIn',{
+    method: 'GET'
+  })
+
+  const result = await response.json();
+
+  if(result.loggedIn){
+    ReactDOM.render(
+      <CatGramForm />,
+      document.getElementById('makeGram')
+    );
+    uploadGram = document.getElementById('postGramForm');
+    uploadGram.addEventListener('submit', sendGram);
+  }
+  else{
+    ReactDOM.render(
+      <CatGramFormLoggedOut />,
+      document.getElementById('makeGram')
+    );
+  }
+}
 
 const handleUpdate = async (_id, signedNum) => {
   const data = {_id,signedNum}
@@ -56,6 +71,13 @@ const CatGramForm = (props) => {
       <input type="text" name="textInput" />
       <input type='submit' value='Post Gram' />
     </form> 
+  )
+}
+
+const CatGramFormLoggedOut = (props) => {
+  return(
+    <div>Log in to make posts
+    </div> 
   )
 }
 
@@ -131,18 +153,12 @@ const loadGramsFromServer = async () => {
 }
 
 const init = () => {
-  ReactDOM.render(
-    <CatGramForm />,
-    document.getElementById('makeGram')
-  );
+  isLoggedIn();
 
   ReactDOM.render(
     <GramList grams={[]} />,
     document.getElementById ('catGrams')
   );
-
-  uploadGram = document.getElementById('postGramForm');
-  uploadGram.addEventListener('submit', sendGram);
 
   loadGramsFromServer();
 }

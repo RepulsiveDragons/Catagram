@@ -100,6 +100,16 @@ const changePassword = (req, res) => {
   });
 };
 
+const checkLoggedIn = (req, res) => {
+  if (req.session.account) {
+    console.log('user is logged in');
+    return res.json({ loggedIn: true });
+  }
+
+  console.log('user is logged out');
+  return res.json({ loggedIn: false });
+};
+
 module.exports = {
   loginPage,
   changePasswordPage,
@@ -107,4 +117,5 @@ module.exports = {
   logout,
   signup,
   changePassword,
+  checkLoggedIn,
 };
