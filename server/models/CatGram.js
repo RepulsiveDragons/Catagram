@@ -4,6 +4,14 @@ const CatGramSchema = new mongoose.Schema({
   text: {
     type: String,
   },
+  user: {
+    type: String,
+  },
+  user_id: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Account',
+  },
+  comments: [String],
   name: {
     type: String,
   },

@@ -14,6 +14,8 @@ const postCatGram = async (req, res) => {
 
   const catPost = {
     text: req.body.textInput,
+    user: req.session.account.username,
+    user_id: req.session.account._id,
     name: req.files.mediaFile.name,
     data: req.files.mediaFile.data,
     size: req.files.mediaFile.size,
@@ -63,8 +65,8 @@ const retrieveGram = async (req, res) => {
 
 const getGrams = async (req, res) => {
   try {
-    const docs = await CatGram.find().select('text _id mimetype likes').lean().exec();
-
+    const docs = await CatGram.find().select('text user user_id _id mimetype likes').lean().exec();
+ 
     return res.json({ grams: docs });
   } catch (err) {
     console.log(err);

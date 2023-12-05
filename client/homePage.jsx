@@ -14,6 +14,10 @@ const sendGram = async(e) => {
   console.log(text);
 
   loadGramsFromServer();
+  ReactDOM.render(
+    <CatGramForm />,
+    document.getElementById('makeGram')
+  );
 
   return false;
 };
@@ -65,10 +69,25 @@ const CatGramForm = (props) => {
     action='/postGram' 
     method='post' 
     encType="multipart/form-data"
-    className="domoForm"
-    >
-      <input type="file" name="mediaFile" />
+    className="gramMakerForm"
+    >      
       <input type="text" name="textInput" />
+      <div class="file has-name is-right">
+        <label class="file-label">
+          <input class="file-input" type="file" name="mediaFile"/>
+          <span class="file-cta">
+            <span class="file-icon">
+              <i class="fas fa-upload"></i>
+            </span>
+            <span class="file-label">
+              Choose a file…
+            </span>
+          </span>
+          <span class="file-name">
+            myveryawesomecat.png
+          </span>
+        </label>
+      </div>
       <input type='submit' value='Post Gram' />
     </form> 
   )
@@ -76,12 +95,17 @@ const CatGramForm = (props) => {
 
 const CatGramFormLoggedOut = (props) => {
   return(
-    <div>Log in to make posts
+    <div className="gramMakerForm">
+      Log in to make posts
     </div> 
   )
 }
 
 const GramList = (props) => {
+  const handleCommentClick = () => {
+    
+  }
+
   if(props.grams.length === 0){
     return (
       <div className="gramList">
@@ -90,28 +114,35 @@ const GramList = (props) => {
     )
   }
 
-  const gramNodes = props.grams.map(gram => {
+  const gramNodes = props.grams.reverse().map(gram => {
     let url = `/retrieveGram?_id=${gram._id}`;
 
     return (
-      <div class="card" key={gram._id}>
-        <div class="card-content my-4">
-          <div class="content">
+      <div class="gram" key={gram._id}>
+          <h2 className="username">
+            {gram.user}
+          </h2>
+          <div className="textContent">
             {gram.text}
           </div>
-          <div class="media">
-            <figure class="image">
+          <div className="mediaContainer">
+            <figure className="catMedia">
               <img src={url} alt="A Catgram"/>
             </figure>
           </div>
-          <LikeButton likes={gram.likes} _id={gram._id}/>
-        </div>
+          <div>         
+             <LikeButton likes={gram.likes} _id={gram._id}/>
+             <button className="commentButton" onClick={ handleCommentClick }>
+              <span className="comments-counter">{ `Comments | ${0}` }</span>
+            </button>
+          </div>
+
       </div>
     )
   })
 
   return (
-    <div className="domoList">
+    <div className="gramList">
       {gramNodes}
     </div>
   )
@@ -125,11 +156,9 @@ const LikeButton = (props) => {
 
   const handleClick = () => {
     if (isClicked) {
-      //handleUpdate(props._id,-1);
       helper.sendPost('/updateLikes', {_id, signedNum: -1})
       setLikes(likes - 1);
     } else {
-      //handleUpdate(props._id,1);
       helper.sendPost('/updateLikes', {_id, signedNum: 1})
       setLikes(likes + 1);
     }
