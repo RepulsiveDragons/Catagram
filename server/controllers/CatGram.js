@@ -65,7 +65,7 @@ const retrieveGram = async (req, res) => {
 
 const getGrams = async (req, res) => {
   try {
-    const docs = await CatGram.find().select('text user user_id _id mimetype likes').lean().exec();
+    const docs = await CatGram.find().select('text user user_id _id mimetype likes comments').lean().exec();
  
     return res.json({ grams: docs });
   } catch (err) {
@@ -95,10 +95,54 @@ const updateLikes = async (req, res) => {
   });
 };
 
+const postComment = async (req, res) => {
+  let doc;
+  console.log(req.body._id);
+  console.log(req.body.comment);
+  try {
+    doc = await CatGram.findOneAndUpdate(
+      { _id: req.body._id },
+      { $push:{"comments": `${req.session.account.username}: ${req.body.comment}`} },
+    ).exec();
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: 'Something went wrong' });
+  }
+
+  if (!doc) {
+    return res.status(404).json({ error: 'No post was found' });
+  }
+
+  return res.status(201).json({
+    message: 'comment added to post',
+  });
+}
+
+const getComments = async (req, res) => {
+  if (!req.query._id) {
+    return res.status(400).json({ error: 'Missing file id!' });
+  }
+
+  let doc;
+  try {
+    doc = await CatGram.findOne({ _id: req.query._id }).select('comments _id').lean().exec();
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ error: 'Something went wrong retrieving file!' });
+  }
+
+  if (!doc) {
+    return res.status(404).json({ error: 'File not found!' });
+  }
+  return res.json({comments: doc.comments, _id: doc._id});
+}
+
 module.exports = {
   homePage,
   postCatGram,
   retrieveGram,
   getGrams,
   updateLikes,
+  postComment,
+  getComments,
 };

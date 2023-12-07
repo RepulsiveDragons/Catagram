@@ -34,6 +34,10 @@ const isLoggedIn = async() => {
       <CatGramForm />,
       document.getElementById('makeGram')
     );
+    ReactDOM.render(
+      <LoggedInNavbar />,
+      document.getElementById('navbar')
+    );
     uploadGram = document.getElementById('postGramForm');
     uploadGram.addEventListener('submit', sendGram);
   }
@@ -42,7 +46,32 @@ const isLoggedIn = async() => {
       <CatGramFormLoggedOut />,
       document.getElementById('makeGram')
     );
+
+    ReactDOM.render(
+      <LoggedOutNavbar />,
+      document.getElementById('navbar')
+    );
   }
+}
+
+const handlePostComment = (e) => {
+  e.preventDefault();
+
+  const comment = e.target.querySelector('#commentInput').value;
+  const _id = e.target.getAttribute('_id');
+  console.log(`${_id}: ${comment} `);
+  console.log(e.target);
+
+  if(!comment){
+    helper.handleError('Write a comment before submitting');
+    return false;
+  }
+
+  helper.sendPost(e.target.action, {_id: _id, comment: comment});
+
+  loadCommentsFromServer(_id);
+
+  return false;
 }
 
 const handleUpdate = async (_id, signedNum) => {
@@ -60,6 +89,24 @@ const handleUpdate = async (_id, signedNum) => {
   console.log(text);
 
   return false;
+}
+
+const LoggedOutNavbar = (props) => {
+  return(
+    <div><a href="/login"><img id="logo" src="/assets/img/face.png" alt="face logo"/></a>
+      <div class="navlink"><a id="loginButton" href="/login">Login</a></div>
+      <div class="navlink"><a id="signupButton" href="/signup">Sign up</a></div>
+    </div>
+  )
+}
+
+const LoggedInNavbar = (props) => {
+  return(
+    <div><a href="/login"><img id="logo" src="/assets/img/face.png" alt="face logo"/></a>
+      <div class="navlink"><a href="/logout">Log out</a></div>
+      <div class="navlink"><a href="/changePassword">Change Password</a></div>
+    </div>
+  )
 }
 
 const CatGramForm = (props) => {
@@ -101,9 +148,71 @@ const CatGramFormLoggedOut = (props) => {
   )
 }
 
-const GramList = (props) => {
-  const handleCommentClick = () => {
+const CommentList = (props) => {
+  if(props.comments.length === 0){
+    return (
+      <div className="commentsContent">
+        <div className="commentFormDiv">
+          <form 
+          id='postComment' 
+          action='/postComment' 
+          onSubmit={handlePostComment}
+          method='post' 
+          className="commentForm"
+          _id={props._id}
+          >      
+            <input id="commentInput" type="text" name="textInput"/>
+            <input id="submitComment" type='submit' value='Post Comment'/>
+          </form> 
+        </div>
+        <div className="noCommentDiv">
+          <h2 className="noComments">This post has no comments yet!</h2>
+        </div>
+      </div>
+    )
+  }
+
+  const commentNodes = props.comments.map(comment => {
+    return (
+      <div class="commentDiv" key={comment._id}>
+          <h2 className="comment">
+            {comment}
+          </h2>
+      </div>
+    )
+  })
+
+  return (
+    <div className="commentsContent">
+      <div className="commentFormDiv">
+        <form 
+        id='postComment' 
+        action='/postComment' 
+        onSubmit={handlePostComment}
+        method='post' 
+        className="commentForm"
+        _id={props._id}
+        >      
+          <input id="commentInput" type="text" name="textInput"/>
+          <input id="submitComment" type='submit' value='Post Comment'/>
+        </form> 
+      </div>
+      <div className="commentsDiv">
+        {commentNodes}
+      </div>
+    </div>
     
+  )
+
+}
+
+const GramList = (props) => {
+  const handleCommentClick = (e) => {
+    const commentsMenu = document.getElementById("commentsMenu");
+    commentsMenu.classList.remove('hidden');
+
+    console.log(e.target.getAttribute('_id'));
+    loadCommentsFromServer(e.target.getAttribute('_id'));
   }
 
   if(props.grams.length === 0){
@@ -133,10 +242,9 @@ const GramList = (props) => {
           <div>         
              <LikeButton likes={gram.likes} _id={gram._id}/>
              <button className="commentButton" onClick={ handleCommentClick }>
-              <span className="comments-counter">{ `Comments | ${0}` }</span>
-            </button>
+              <span className="comments-counter"  _id={gram._id}>{ `Comments | ${0}` }</span>
+             </button>
           </div>
-
       </div>
     )
   })
@@ -172,12 +280,23 @@ const LikeButton = (props) => {
   );
 };
 
+
 const loadGramsFromServer = async () => {
   const response = await fetch('/getGrams');
   const data = await response.json();
   ReactDOM.render(
     <GramList grams={data.grams} />,
     document.getElementById('catGrams')
+  );
+}
+
+const loadCommentsFromServer = async (_id) => {
+  const response = await fetch(`/getComments?_id=${_id}`);
+  const data = await response.json();
+
+  ReactDOM.render(
+    <CommentList comments={data.comments} _id={data._id}/>,
+    document.getElementById('commentContent')
   );
 }
 
@@ -190,6 +309,15 @@ const init = () => {
   );
 
   loadGramsFromServer();
+
+  const closeButton = document.getElementById("closeComment");
+  const commentsMenu = document.getElementById("commentsMenu");
+
+  closeButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    commentsMenu.classList.add('hidden');
+    return false;
+  })
 }
 
 window.onload = init; 

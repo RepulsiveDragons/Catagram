@@ -17,9 +17,11 @@ const router = (app) => {
 
   app.get('/homePage', controllers.CatGram.homePage);
   app.post('/postGram', mid.requiresLogin, controllers.CatGram.postCatGram);
+  app.post('/postComment', mid.requiresLogin, controllers.CatGram.postComment);
 
   app.get('/retrieveGram', controllers.CatGram.retrieveGram);
   app.get('/getGrams', controllers.CatGram.getGrams);
+  app.get('/getComments', controllers.CatGram.getComments);
   app.post('/updateLikes', mid.requiresLogin, controllers.CatGram.updateLikes);
 
   app.get('/', mid.requiresSecure, controllers.CatGram.homePage);
