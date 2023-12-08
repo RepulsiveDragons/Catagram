@@ -5,6 +5,7 @@ module.exports = {
         app: './client/homePage.jsx',
         login: './client/login.jsx',
         changePassword: './client/changePassword.jsx',
+        gallery: './client/gallery.jsx',
     },
     module: {
         rules: [

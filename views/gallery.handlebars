@@ -1,21 +1,21 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
-  <title>Catagram</title>
+  <title>Catagram
   <link rel="shortcut icon" href="/assets/img/favicon.png"/>
   <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
 </head>
-<body> 
-  <nav id="navbar"><a href="/homePage"><img id="logo" src="/assets/img/face.png" alt="face logo"/></a>
-    <div class="navlink"><a href="/homePage">Home</a></div>
+<body>
+  <nav id="navbar">
+      <div class="navlink"><a href="/logout">Log out</a></div>
+      <div class="navlink"><a href="/changePassword">Change Password</a></div>
+      <div class="navlink"><a href="/homePage">Home</a></div>
   </nav>
 
-  <div class="titlePic">
-    <img class="sillycat" src="/assets/img/sillycat.png" alt="silly cat"/>
-  </div>
-  
-  <section id="content">
-
+  </section>
+  <section id="galleryGrams">
+    
   </section>
 
   <div id="catMessage" class='hidden'>
@@ -23,6 +23,6 @@
     <h3><span id="errorMessage"></span></h3>
     <img id="cat" src="/assets/img/sadcatthumbsup.png" alt="cat"/>
   </div>
-  <script src="/assets/changePasswordBundle.js"></script>
+  <script src="/assets/galleryBundle.js"></script>
 </body>
 </html>

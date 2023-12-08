@@ -6,21 +6,28 @@ const homePage = async (req, res) => res.render('app');
 
 const postCatGram = async (req, res) => {
   if (!req.files || !req.files.mediaFile) {
-    return res.status(400).json({ error: 'No files were uploaded' });
+    return res.status(400).json({ error: 'You need to upload a file before posting' });
   }
 
   const { mediaFile } = req.files;
-  console.log(mediaFile);
+
+  if(mediaFile.mimetype != 'image/png'
+  && mediaFile.mimetype != 'image/jpeg' 
+  && mediaFile.mimetype != 'image/gif'
+  && mediaFile.mimetype != 'video/mp4'){
+  return res.status(400).json({ error: 'Only image files are allowed' });
+}
 
   const catPost = {
     text: req.body.textInput,
     user: req.session.account.username,
     user_id: req.session.account._id,
-    name: req.files.mediaFile.name,
-    data: req.files.mediaFile.data,
-    size: req.files.mediaFile.size,
-    mimetype: req.files.mediaFile.mimetype,
+    name: mediaFile.name,
+    data: mediaFile.data,
+    size: mediaFile.size,
+    mimetype: mediaFile.mimetype,
     likes: 0,
+    comments: [],
   };
 
   try {
@@ -33,7 +40,7 @@ const postCatGram = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(400).json({
-      error: 'Something went wrong uploading file!',
+      error: 'Something went wrong uploading file or file was too big',
     });
   }
 };
@@ -96,6 +103,10 @@ const updateLikes = async (req, res) => {
 };
 
 const postComment = async (req, res) => {
+  if(!req.session.account){
+    return res.status(400).json({error: "Need to be logged in to make comments"});
+  }
+  
   let doc;
   console.log(req.body._id);
   console.log(req.body.comment);

@@ -34,7 +34,7 @@ const ChangePasswordWindow = (props) => {
       <input id="pass" type="password" name="pass" placeholder="password"/>
       <label htmlFor="pass2">Re-type Password: </label>
       <input id="pass2" type="password" name="pass2" placeholder="retype password"/>
-      <input class="formSubmit" type="submit" value="Change Password" />
+      <input class="formSubmit" type="submit" value="Submit" />
     </form>
   );
 }

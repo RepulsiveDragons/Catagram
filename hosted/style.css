@@ -28,7 +28,7 @@ nav:nth-child(1) {
 .navlink {
     padding: 5px;
     padding-top: 12px;
-    padding-left: 20px;
+    padding-right: 20px;
     color: white;
     font-size: 1.3em;
     float: right;
@@ -52,7 +52,7 @@ nav:nth-child(1) {
     height: 300px;
     width: 350px;
     margin: 0 auto;
-    padding-top: 350px;
+    padding-top: 50px;
     font-size: 1.2em;
 }
 
@@ -93,7 +93,7 @@ nav:nth-child(1) {
     background-color: #338acc;
 }
 
-#user, #pass, #pass2 {
+#user, #pass, #pass2, #currentPass {
     text-align: center;
     font-size: 1.1em;
     width: 180px;
@@ -111,7 +111,7 @@ nav:nth-child(1) {
 
 #catMessage {
     top: 250px;
-    width: 250px;
+    width: 350px;
     height: 650px;
     position: absolute;
     z-index: 200;
@@ -137,80 +137,29 @@ nav:nth-child(1) {
     font-weight: bold;
     color: red;
     font-style: italic;
+    z-index: 500;
 }
 
 #cat {
-    z-index: 225;
-    margin-top: -20px;
-    margin-left: 135px;
-    height: 450px;
-    width: 300px;
-    -ms-transform: rotate(330deg);
-    -webkit-transform: rotate(330deg); 
-    transform: rotate(330deg);
-}
-
-#domos {
-    width: 40%;
-    min-width: 400px;
-    border: 2px solid #55acee;
-    border-radius: 4px;
-    margin: 0 auto;
-    margin-top: 100px;
-}
-
-/* .domo {
-    width: 66.666%;
-    margin: 0 auto;
-    margin-top: 2px;
-    margin-bottom: 2px;
-    border: 2px solid #55acee;
-    border-radius: 4px;
-    background-color: #55acee;
-    padding: 10px;
-    min-height:60px;
-    overflow: hidden;
-}
-
-.domo:hover {
-    transition: border-color 0.2s ease-out;
-    border-color: rgba(255,255,255, 0.8);
-    transition: background-color 2.6s ease-out;
-    background-color: #66bfff;
-}
-
-img.domoFace {
-    margin-left: 25px;
-    margin-right: 10px;
-    height: 50px;
-    width: 50px;
-    border-radius: 4px;
-    margin-top:10px;
-}
-
-h3.emptyDomo {
+    top: 0px;
     width: 400px;
-    font-size: 1.5em;
-    margin: 0 auto;
-    text-align: center;
-    margin-top: 18px;
+    height: 300px;
+    position: absolute;
+    z-index: 150;
+    right: 0px;
 }
 
-h3.domoName {
-    text-align: center;
-    width: 200px;
-    font-weight: bold;
-    padding-left: 65px;
-    font-size: 1.5em;
+.titlePic {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh; /* Adjust as needed */
 }
 
-.domo:first-child {
-    margin-top: 10px;
+.titlePic img{
+  max-width: 90%;
+  max-height: 90%;
 }
-
-.domo:last-child {
-    margin-bottom:10px;
-} */
 
 #catGrams {
   display: flex;
@@ -262,13 +211,10 @@ h3.domoName {
 
 .gramMakerForm input[type="text"] {
   width: 100%;
-  height: 6rem;
+  height: 2rem;
   border: none;
   resize: none;
-  overflow-x: wrap;
   font-size: 16px;
-  padding-bottom: 6rem;
-  padding-top: 1rem;
   margin-bottom: 12px;
 }
 
@@ -292,11 +238,6 @@ h3.domoName {
 .gramMakerForm input[type="submit"]:hover {
   background-color: #0d8ecf;
 }
-/*
-img {
-  max-width: 300px;
-  max-height: 200px;
-}*/
 
 .gram {
   display: flex;
@@ -328,6 +269,13 @@ img {
 }
 
 .gram.img {
+  width: 100%;
+  min-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.gram.video {
   width: 100%;
   height: auto;
 }
@@ -379,17 +327,19 @@ img {
   background-color: blanchedalmond;
 }
 
-#commentsDiv {
+.commentsDiv {
+  max-height: 380px;
+  word-wrap: break-word;
   overflow-y: scroll;
 }
 
-.comment {
+.commentDiv {
   font-size: 20px;
   background-color:rgba(255,255,255, 0.8);
   padding-top: 2px;
   padding-bottom: 2px;
   border-bottom: 1px solid lightblue;
-  width: auto;
+  max-width: 500px;
   overflow-x: wrap;
 }
 
@@ -399,12 +349,12 @@ img {
 
 #commentInput {
   width: 70%;
-  height: 2rem;
   border: none;
   resize: none;
   overflow-x: wrap;
   font-size: 16px;
-  padding-bottom: 2rem;
+  padding-bottom: 1rem;
+  padding-top: 1rem;
 }
 
 #submitComment {
@@ -417,22 +367,38 @@ img {
   cursor: pointer;
   margin-top: 2rem;
 }
-/*
-#commentsMenu .commentsContent {
-  visibility: hidden;
-  background-color: lightblue;
-  color: white;
-  width: 400px;
-  height: 300px;
-  text-align: left;
-  position: absolute;
-  z-index: 1;
-  border-radius: 10px;
-  padding: 10px 0;
-  bottom: 100%;
-  left: 30%;
-  margin-left: -100px;
-}*/
+
+#adOne {
+  margin-top: 3rem;
+  display: block;
+  float: left;
+  background-color: aqua;
+  width: 200px;
+  height: 500px;
+}
+
+#adTwo {
+  margin-top: 3rem;
+  display: block;
+  float: right;
+  background-color: aqua;
+  width: 200px;
+  height: 500px;
+}
+
+#galleryGrams {
+  display: flex;
+  flex-direction: row;
+  width: 600px;
+  max-width: 100%;
+  background-color: #ffffff;
+  border: 1px solid #dae0e6;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
 
 
   

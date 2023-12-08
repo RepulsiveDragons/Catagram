@@ -10,8 +10,12 @@ const sendGram = async(e) => {
     body: new FormData(e.target),
   });
 
-  const text = await response.text();
-  console.log(text);
+  const result = await response.json();
+  document.getElementById('catMessage').classList.add('hidden');
+
+  if(result.error) {
+    helper.handleError(result.error);
+  }
 
   loadGramsFromServer();
   ReactDOM.render(
@@ -74,37 +78,20 @@ const handlePostComment = (e) => {
   return false;
 }
 
-const handleUpdate = async (_id, signedNum) => {
-  const data = {_id,signedNum}
-
-  const response = await fetch('/updateLikes',{
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data),
-});
-
-  const text = await response.text();
-  console.log(text);
-
-  return false;
-}
-
 const LoggedOutNavbar = (props) => {
   return(
-    <div><a href="/login"><img id="logo" src="/assets/img/face.png" alt="face logo"/></a>
+    <div><a href="/homePage"><img id="logo" src="/assets/img/face.png" alt="face logo"/></a>
       <div class="navlink"><a id="loginButton" href="/login">Login</a></div>
-      <div class="navlink"><a id="signupButton" href="/signup">Sign up</a></div>
     </div>
   )
 }
 
 const LoggedInNavbar = (props) => {
   return(
-    <div><a href="/login"><img id="logo" src="/assets/img/face.png" alt="face logo"/></a>
+    <div><a href="/homePage"><img id="logo" src="/assets/img/face.png" alt="face logo"/></a>
       <div class="navlink"><a href="/logout">Log out</a></div>
       <div class="navlink"><a href="/changePassword">Change Password</a></div>
+      <div class="navlink"><a href="/gallery">Gallery</a></div>
     </div>
   )
 }
@@ -207,12 +194,12 @@ const CommentList = (props) => {
 }
 
 const GramList = (props) => {
-  const handleCommentClick = (e) => {
+  const handleCommentClick = (e, _id) => {
     const commentsMenu = document.getElementById("commentsMenu");
     commentsMenu.classList.remove('hidden');
 
-    console.log(e.target.getAttribute('_id'));
-    loadCommentsFromServer(e.target.getAttribute('_id'));
+    console.log(_id);
+    loadCommentsFromServer(_id);
   }
 
   if(props.grams.length === 0){
@@ -226,28 +213,53 @@ const GramList = (props) => {
   const gramNodes = props.grams.reverse().map(gram => {
     let url = `/retrieveGram?_id=${gram._id}`;
 
-    return (
-      <div class="gram" key={gram._id}>
-          <h2 className="username">
-            {gram.user}
-          </h2>
-          <div className="textContent">
-            {gram.text}
-          </div>
-          <div className="mediaContainer">
-            <figure className="catMedia">
-              <img src={url} alt="A Catgram"/>
-            </figure>
-          </div>
-          <div>         
-             <LikeButton likes={gram.likes} _id={gram._id}/>
-             <button className="commentButton" onClick={ handleCommentClick }>
-              <span className="comments-counter"  _id={gram._id}>{ `Comments | ${0}` }</span>
-             </button>
-          </div>
-      </div>
-    )
-  })
+    if (gram.mimetype === 'video/mp4') {
+      return (
+        <div class="gram" key={gram._id}>
+            <h2 className="username">
+              {gram.user}
+            </h2>
+            <div className="textContent">
+              {gram.text}
+            </div>
+            <div className="mediaContainer">
+              <figure className="catMedia">
+                <video controls>
+                  <source src="url" type="video/mp4"/>
+                  Your browser does not support the video tag.
+                </video>
+              </figure>
+            </div>
+            <div>         
+               <LikeButton likes={gram.likes} _id={gram._id}/>
+               <button className="commentButton" onClick={ (e) => handleCommentClick(e, gram._id) }>
+                <span className="comments-counter"  _id={gram._id}>{ `Comments | ${gram.comments.length}` }</span>
+               </button>
+            </div>
+        </div>
+      )      
+    }
+    
+    else if(gram.mimetype === 'image/png' || gram.mimetype === 'image/jpeg' || gram.mimetype === 'image/gif'){
+      return (
+        <div class="gram" key={gram._id}>
+            <h2 className="username">
+              {gram.user}
+            </h2>
+            <div className="textContent">
+              {gram.text}
+            </div>
+            <img src={url} alt="A Catgram"/>
+            <div>         
+              <LikeButton likes={gram.likes} _id={gram._id}/>
+              <button className="commentButton" onClick={ (e) => handleCommentClick(e, gram._id) }>
+                <span className="comments-counter"  _id={gram._id}>{ `Comments | ${gram.comments.length}` }</span>
+              </button>
+            </div>
+        </div>
+      )
+    }})
+  
 
   return (
     <div className="gramList">
@@ -280,6 +292,13 @@ const LikeButton = (props) => {
   );
 };
 
+const Advertisement = () => {
+  return(
+    <div class=''>
+      Put Ad Here
+    </div>
+  )
+}
 
 const loadGramsFromServer = async () => {
   const response = await fetch('/getGrams');
