@@ -12,13 +12,16 @@ const router = (app) => {
 
   app.get('/logout', mid.requiresLogin, controllers.Account.logout);
   app.get('/checkLoggedIn', controllers.Account.checkLoggedIn);
+  app.get('/getSessionId', mid.requiresLogin, controllers.Account.getSessionId);
 
   app.get('/homePage', controllers.CatGram.homePage);
+  app.get('/gallery', mid.requiresLogin, controllers.CatGram.galleryPage);
   app.post('/postGram', mid.requiresLogin, controllers.CatGram.postCatGram);
   app.post('/postComment', mid.requiresLogin, controllers.CatGram.postComment);
 
   app.get('/retrieveGram', controllers.CatGram.retrieveGram);
   app.get('/getGrams', controllers.CatGram.getGrams);
+  app.get('/getGalleryGrams', mid.requiresLogin, controllers.CatGram.getGalleryGrams);
   app.get('/getComments', controllers.CatGram.getComments);
   app.post('/updateLikes', mid.requiresLogin, controllers.CatGram.updateLikes);
 

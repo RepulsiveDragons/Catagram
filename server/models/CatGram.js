@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// Schema for a catgram
 const CatGramSchema = new mongoose.Schema({
   text: {
     type: String,

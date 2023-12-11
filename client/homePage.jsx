@@ -2,7 +2,7 @@ const helper = require('./helper.js');
 const React = require('react');
 const ReactDOM = require('react-dom');
 
-
+//A post request sending an optional text input and a required media file
 const sendGram = async(e) => {
   e.preventDefault();
   const response = await fetch('/postGram',{
@@ -26,6 +26,7 @@ const sendGram = async(e) => {
   return false;
 };
 
+//Checks if the user is logged in and displays the appropriate html 
 const isLoggedIn = async() => {
   const response = await fetch('/checkLoggedIn',{
     method: 'GET'
@@ -40,7 +41,7 @@ const isLoggedIn = async() => {
     );
     ReactDOM.render(
       <LoggedInNavbar />,
-      document.getElementById('navbar')
+      document.getElementById('navbarContent')
     );
     uploadGram = document.getElementById('postGramForm');
     uploadGram.addEventListener('submit', sendGram);
@@ -53,11 +54,12 @@ const isLoggedIn = async() => {
 
     ReactDOM.render(
       <LoggedOutNavbar />,
-      document.getElementById('navbar')
+      document.getElementById('navbarContent')
     );
   }
 }
 
+//Post request for a user wanting to post a comment to a catgram
 const handlePostComment = (e) => {
   e.preventDefault();
 
@@ -78,24 +80,37 @@ const handlePostComment = (e) => {
   return false;
 }
 
+//component for the navbar when a user is logged out
 const LoggedOutNavbar = (props) => {
   return(
-    <div><a href="/homePage"><img id="logo" src="/assets/img/face.png" alt="face logo"/></a>
-      <div class="navlink"><a id="loginButton" href="/login">Login</a></div>
+    <div class="navbar-end">
+      <a class="navbar-item" href="/login">Log In</a>
     </div>
   )
 }
 
+//component for a navbar when the user is logged in
 const LoggedInNavbar = (props) => {
   return(
-    <div><a href="/homePage"><img id="logo" src="/assets/img/face.png" alt="face logo"/></a>
-      <div class="navlink"><a href="/logout">Log out</a></div>
-      <div class="navlink"><a href="/changePassword">Change Password</a></div>
-      <div class="navlink"><a href="/gallery">Gallery</a></div>
+    <div class="navbar-start">
+      <a class="navbar-item" href="/homePage">
+        Home
+      </a>
+
+      <a class="navbar-item" href="/gallery">
+        Gallery
+      </a>
+
+      <a class="navbar-item" href="/changePassword">
+        Change Password
+      </a>
+
+      <a class="navbar-item" href="/logout">Log Out</a>
     </div>
   )
 }
 
+//the main form for the user to submit a catgram
 const CatGramForm = (props) => {
   return(
     <form 
@@ -127,6 +142,7 @@ const CatGramForm = (props) => {
   )
 }
 
+//displays a message instead of the main form if the user is not logged in
 const CatGramFormLoggedOut = (props) => {
   return(
     <div className="gramMakerForm">
@@ -135,6 +151,10 @@ const CatGramFormLoggedOut = (props) => {
   )
 }
 
+//Component for the comment menu
+//this menu will be hidden until the user clicks on a comment button
+//has html for a form to submit comments
+//and will display all the available comments of that catgram
 const CommentList = (props) => {
   if(props.comments.length === 0){
     return (
@@ -193,7 +213,9 @@ const CommentList = (props) => {
 
 }
 
+//component for displaying all the catgrams in the database
 const GramList = (props) => {
+  //show the comment menu when the comment buttons is clicked
   const handleCommentClick = (e, _id) => {
     const commentsMenu = document.getElementById("commentsMenu");
     commentsMenu.classList.remove('hidden');
@@ -225,7 +247,7 @@ const GramList = (props) => {
             <div className="mediaContainer">
               <figure className="catMedia">
                 <video controls>
-                  <source src="url" type="video/mp4"/>
+                  <source src={url} type="video/mp4"/>
                   Your browser does not support the video tag.
                 </video>
               </figure>
@@ -268,6 +290,8 @@ const GramList = (props) => {
   )
 }
 
+//Button component for a like button
+//credit for code https://stackoverflow.com/questions/72153851/create-a-simple-like-button-component-with-react
 const LikeButton = (props) => {
   const [likes, setLikes] = React.useState(props.likes);
   const [isClicked, setIsClicked] = React.useState(false);
@@ -292,14 +316,8 @@ const LikeButton = (props) => {
   );
 };
 
-const Advertisement = () => {
-  return(
-    <div class=''>
-      Put Ad Here
-    </div>
-  )
-}
-
+//a get request to get all the catgrams in the server and pass it into 
+//the GramList compenent to load it in to the client
 const loadGramsFromServer = async () => {
   const response = await fetch('/getGrams');
   const data = await response.json();
@@ -309,6 +327,7 @@ const loadGramsFromServer = async () => {
   );
 }
 
+//a get request to get all the comments on a specific catgram
 const loadCommentsFromServer = async (_id) => {
   const response = await fetch(`/getComments?_id=${_id}`);
   const data = await response.json();

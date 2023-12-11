@@ -1,13 +1,30 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
-  <title>DomoMaker</title>
+  <title>Catagram</title>
   <link rel="shortcut icon" href="/assets/img/favicon.png"/>
   <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
 </head>
 <body>
-  <nav id="navbar">
+  {{!-- <nav id="navbar">
+  </nav> --}}
+
+  <nav id="dynamicNav" class="navbar is-info" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a href="/homePage"><img id="logo" src="/assets/img/face.png" alt="face logo"/>
+
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasic">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div id="navbarContent" class="navbar-menu">
+
+    </div>
+
   </nav>
 
   <div id="adOne">

@@ -3,6 +3,20 @@ const handleError = (message) => {
   document.getElementById('catMessage').classList.remove('hidden');
 };
 
+const getSessionId = async () => {
+  const response = await fetch('/getSessionId',{
+    method: 'GET'
+  })
+
+  const result = await response.json();
+
+  if(result.error){
+    handleError(error);
+  }
+
+  return result._id;
+}
+
 /* Sends post requests to the server using fetch. Will look for various
    entries in the response JSON object, and will handle them appropriately.
 */
@@ -39,4 +53,5 @@ module.exports = {
   handleError,
   sendPost,
   hideError,
+  getSessionId,
 }

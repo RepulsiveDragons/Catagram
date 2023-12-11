@@ -25,15 +25,16 @@ const handleChange = (e) => {
   return false;
 }
 
+//component for change password form
 const ChangePasswordWindow = (props) => {
   return(
     <form id="changePasswordForm" name="changePasswordForm" onSubmit={handleChange} action="/changePassword" method="POST" className="mainForm">
       <label htmlFor="currentPass">Current Password: </label>
-      <input id="currentPass" type="password" name="currentPass" placeholder="current password"/>
+      <input id="currentPass" class="input" type="password" name="currentPass" placeholder="current password"/>
       <label htmlFor="pass">New Password: </label>
-      <input id="pass" type="password" name="pass" placeholder="password"/>
+      <input id="pass" class="input" type="password" name="pass" placeholder="password"/>
       <label htmlFor="pass2">Re-type Password: </label>
-      <input id="pass2" type="password" name="pass2" placeholder="retype password"/>
+      <input id="pass2" class="input" type="password" name="pass2" placeholder="retype password"/>
       <input class="formSubmit" type="submit" value="Submit" />
     </form>
   );

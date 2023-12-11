@@ -4,13 +4,34 @@
   <title>Catagram</title>
   <link rel="shortcut icon" href="/assets/img/favicon.png"/>
   <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
 </head>
 <body> 
-  <nav id="navbar"><a href="/homePage"><img id="logo" src="/assets/img/face.png" alt="face logo"/></a>
+  {{!-- <nav id="navbar"><a href="/homePage"><img id="logo" src="/assets/img/face.png" alt="face logo"/></a>
     <div class="navlink"><a id="loginButton" href="/login">Login</a></div>
     <div class="navlink"><a id="signupButton" href="/signup">Sign up</a></div>
+  </nav> --}}
+
+  <nav class="navbar is-info" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a href="/homePage"><img id="logo" src="/assets/img/face.png" alt="face logo"/>
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div id="navbarContent" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" id="loginButton" href="/login">Log In</a>
+        <a class="navbar-item" id="signupButton" href="/signup">Sign Up</a>
+      </div>
+    </div>
   </nav>
   
+  <h1 class="title is-1 has-text-centered has-text-weight-bold is-family-primary mt-6 mb-1">Catagram</h1>
+
   <div class="titlePic">
     <img class="sillycat" src="/assets/img/sillycat.png" alt="silly cat"/>
   </div>

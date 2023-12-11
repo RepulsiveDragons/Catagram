@@ -2,8 +2,8 @@ const helper = require('./helper.js');
 const React = require('react');
 const ReactDOM = require('react-dom');
 
-
-const GramList = (props) => {
+//Similar to the component in homePage.jsx but displays only the media that the user has posted
+const GalleryList = (props) => {
   if(props.grams.length === 0){
     return (
       <div className="gramList">
@@ -12,14 +12,14 @@ const GramList = (props) => {
     )
   }
 
-  const galleryNodes = props.grams.reverse().map(gram => {
+  const galleryNodes = props.grams.map(gram => {
     let url = `/retrieveGram?_id=${gram._id}`;
 
     if (gram.mimetype === 'video/mp4') {
       return (
-        <div class="gram" key={gram._id}>
+        <div class="galleryGram" key={gram._id}>
           <video controls>
-            <source src="url" type="video/mp4"/>
+            <source src={url} type="video/mp4"/>
             Your browser does not support the video tag.
           </video>
         </div>
@@ -28,7 +28,7 @@ const GramList = (props) => {
     
     else if(gram.mimetype === 'image/png' || gram.mimetype === 'image/jpeg' || gram.mimetype === 'image/gif'){
       return (
-        <div class="gram" key={gram._id}>
+        <div class="galleryGram" key={gram._id}>
           <img src={url} alt="A Catgram"/>
         </div>
       )
@@ -36,28 +36,32 @@ const GramList = (props) => {
   
 
   return (
-    <div className="gramList">
+    <div id="galleryList">
       {galleryNodes}
     </div>
   )
 }
 
-const loadGramsFromServer = async () => {
-  const response = await fetch('/getGrams');
+//Get request to fetch all the user made posts
+const loadGalleryGramsFromServer = async () => {
+  const user_id = await helper.getSessionId();
+  console.log(user_id);
+
+  const response = await fetch(`/getGalleryGrams?user_id=${user_id}`);
   const data = await response.json();
   ReactDOM.render(
-    <GramList grams={data.grams} />,
-    document.getElementById('catGrams')
+    <GalleryList grams={data.grams} />,
+    document.getElementById('galleryGrams')
   );
 }
 
 const init = () => {
   ReactDOM.render(
-    <GramList grams={[]} />,
-    document.getElementById ('catGrams')
+    <GalleryList grams={[]}/>,
+    document.getElementById('galleryGrams')
   );
 
-  loadGramsFromServer();
+  loadGalleryGramsFromServer();
 }
 
 window.onload = init; 

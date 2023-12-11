@@ -6,11 +6,13 @@ const loginPage = (req, res) => res.render('login');
 
 const changePasswordPage = (req, res) => res.render('changePassword');
 
+// logs the user out by destroying the session and redirecting to the home page
 const logout = (req, res) => {
   req.session.destroy();
   return res.redirect('/');
 };
 
+// check the users username and passwor field and log them in if correct
 const login = (req, res) => {
   const username = `${req.body.username}`;
   const pass = `${req.body.pass}`;
@@ -29,6 +31,7 @@ const login = (req, res) => {
   });
 };
 
+// adds a new users data to the database
 const signup = async (req, res) => {
   const username = `${req.body.username}`;
   const pass = `${req.body.pass}`;
@@ -57,6 +60,8 @@ const signup = async (req, res) => {
   }
 };
 
+// Changes the password with a new password
+// requies the user to be logged in an type the correct information
 const changePassword = (req, res) => {
   const currentPassword = `${req.body.pass}`;
   const newPass = `${req.body.newPass}`;
@@ -100,14 +105,24 @@ const changePassword = (req, res) => {
   });
 };
 
+// helper function to check if the user is logged in
 const checkLoggedIn = (req, res) => {
   if (req.session.account) {
-    console.log('user is logged in');
+    console.log(req.session.account._id);
     return res.json({ loggedIn: true });
   }
 
   console.log('user is logged out');
   return res.json({ loggedIn: false });
+};
+
+// get the id of the current user if they are logged in
+const getSessionId = (req, res) => {
+  if (req.session.account) {
+    return res.json({ _id: req.session.account._id });
+  }
+
+  return res.status(500).json({ error: 'There was a problem getting session or user is logged out' });
 };
 
 module.exports = {
@@ -118,4 +133,5 @@ module.exports = {
   signup,
   changePassword,
   checkLoggedIn,
+  getSessionId,
 };
