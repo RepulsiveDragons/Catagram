@@ -65,8 +65,6 @@ const handlePostComment = (e) => {
 
   const comment = e.target.querySelector('#commentInput').value;
   const _id = e.target.getAttribute('_id');
-  console.log(`${_id}: ${comment} `);
-  console.log(e.target);
 
   if(!comment){
     helper.handleError('Write a comment before submitting');
@@ -220,20 +218,22 @@ const GramList = (props) => {
     const commentsMenu = document.getElementById("commentsMenu");
     commentsMenu.classList.remove('hidden');
 
-    console.log(_id);
     loadCommentsFromServer(_id);
   }
 
   if(props.grams.length === 0){
     return (
       <div className="gramList">
-        <h3 className="emptyGram">No CatGrams Yet!</h3>
+        <h2 className="emptyGram"><b>No CatGrams Yet!</b></h2>
       </div>
     )
   }
 
   const gramNodes = props.grams.reverse().map(gram => {
     let url = `/retrieveGram?_id=${gram._id}`;
+    if(gram.comments.length){
+
+    }
 
     if (gram.mimetype === 'video/mp4') {
       return (

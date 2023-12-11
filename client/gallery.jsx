@@ -45,7 +45,6 @@ const GalleryList = (props) => {
 //Get request to fetch all the user made posts
 const loadGalleryGramsFromServer = async () => {
   const user_id = await helper.getSessionId();
-  console.log(user_id);
 
   const response = await fetch(`/getGalleryGrams?user_id=${user_id}`);
   const data = await response.json();
